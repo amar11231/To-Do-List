@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./style.css">
+   <script src="./script.js" defer></script>
+    <title>ToDo </title>
+</head>
+<body>
+    <section class="todo">
+    <h2>To-do list</h2>
+    <div class="input">
+    <input
+     type="text"
+     class="input-field"  
+     id="todoInput" 
+     placeholder="Add a new todo"
+     />
+        <button class="btn">Add</button>
+    </div>
+    <ul class="scroll">
+        <li id="todoList"></li>
+    </ul>
+    <div>
+        <hr class="counter">
+        <div class="counter-container">
+            <p><span>0</span> items total</p>
+            <div class="counter-actions">
+                <button id="focusButton">Focus</button>
+                <button id="deleteButton">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    </section>
+    <footer>
+     <div class="footer">
+        <div class="footer-left">
+            <p class="made-by">Made By</p>
+            <p class="author">Amar Gad <span id="badge" class="badge" aria-hidden="true" title="Level 10+">👑</span></p>
+        </div>
+        <div class="user-stats">
+            <span id="xp">XP: 0</span>
+            <span id="level">Level: 0</span>
+        </div>
+        <div class="theme-controls">
+            <label for="themeSelect">Theme</label>
+            <select id="themeSelect" aria-label="Theme select">
+                <option value="gradient">Gradient</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="custom">Custom</option>
+            </select>
+            <input type="color" id="colorPicker" value="#2d70fd" title="Accent color" style="display:none" />
+        </div>
+    </div> </footer>
+</body>
+</html>
