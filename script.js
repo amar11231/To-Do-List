@@ -133,7 +133,8 @@ function toggleTaskStatus(index){
         // just completed
         if (!todo[index].xpAwarded){
             stats.xp = (stats.xp || 0) + 1;
-            stats.level = stats.xp; // simple mapping: level == xp
+            // level increases each 10 XP: XP 10 -> level 1
+            stats.level = Math.floor(stats.xp / 10);
             todo[index].xpAwarded = true;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
@@ -235,12 +236,25 @@ function renderStats(){
     const xpEl = document.getElementById('xp');
     const lvlEl = document.getElementById('level');
     const badgeEl = document.getElementById('badge');
-    if (xpEl) xpEl.textContent = `XP: ${stats.xp || 0}`;
-    if (lvlEl) lvlEl.textContent = `Level: ${stats.level || 0}`;
+    const xp = stats.xp || 0;
+    const level = (typeof stats.level === 'number') ? stats.level : Math.floor(xp / 10);
+    if (xpEl) xpEl.textContent = `XP: ${xp}`;
+    if (lvlEl) lvlEl.textContent = `Level: ${level}`;
     if (badgeEl){
-        if ((stats.level || 0) >= 10) badgeEl.classList.add('visible');
-        else badgeEl.classList.remove('visible');
-        badgeEl.title = `Level ${stats.level || 0}`;
+        // show multiple crowns for each level (cap display)
+        if (level <= 0){
+            badgeEl.classList.remove('visible');
+            badgeEl.innerHTML = '';
+        } else {
+            badgeEl.classList.add('visible');
+            const cap = 5;
+            if (level <= cap) {
+                badgeEl.innerHTML = '👑'.repeat(level);
+            } else {
+                badgeEl.innerHTML = `👑 x${level}`;
+            }
+        }
+        badgeEl.title = `Level ${level}`;
     }
 }
 
