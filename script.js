@@ -128,14 +128,23 @@ function toggleTaskStatus(index){
     if (!todo[index]) return;
     // toggle and award XP when marking as completed
     const wasDisabled = !!todo[index].disabled;
+    // flip completed state
     todo[index].disabled = !wasDisabled;
+
     if (!wasDisabled && todo[index].disabled){
-        // just completed
+        // just completed: award XP if not already awarded for this task
         if (!todo[index].xpAwarded){
             stats.xp = (stats.xp || 0) + 1;
-            // level increases each 10 XP: XP 10 -> level 1
             stats.level = Math.floor(stats.xp / 10);
             todo[index].xpAwarded = true;
+            localStorage.setItem('stats', JSON.stringify(stats));
+        }
+    } else if (wasDisabled && !todo[index].disabled){
+        // just unchecked (marked incomplete): remove previously awarded XP if any
+        if (todo[index].xpAwarded){
+            stats.xp = Math.max(0, (stats.xp || 0) - 1);
+            stats.level = Math.floor(stats.xp / 10);
+            todo[index].xpAwarded = false;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
     }
