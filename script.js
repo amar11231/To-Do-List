@@ -256,6 +256,19 @@ function renderStats(){
         }
         badgeEl.title = `Level ${level}`;
     }
+
+    // Update player profile fields if present
+    const pLevel = document.getElementById('profile-level');
+    const pXp = document.getElementById('profile-xp');
+    const pNext = document.getElementById('profile-next');
+    if (pLevel) pLevel.textContent = String(level);
+    if (pXp) pXp.textContent = `${xp} XP`;
+    if (pNext) {
+        // next threshold is (level + 1) * 10 XP
+        const nextThreshold = (level + 1) * 10;
+        const left = Math.max(0, nextThreshold - xp);
+        pNext.textContent = `${left} XP LEFT`;
+    }
 }
 
 // Focus mode
