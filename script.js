@@ -460,7 +460,8 @@ function openFocusMode(){
         focusOverlay.className = 'focus-overlay';
         focusOverlay.innerHTML = `
             <div class="focus-panel">
-                <div class="focus-task" id="focus-task"></div>
+                <label for="focus-task-select" style="display:block;margin-bottom:0.5rem;font-weight:600;">Select task to focus</label>
+                <select id="focus-task-select" class="focus-task-select" style="width:100%;padding:0.35rem 0.5rem;border-radius:0.35rem;border:1px solid var(--border-color);margin-bottom:0.8rem"></select>
                 <div class="pom-duration">
                     <label for="pom-duration">Minutes</label>
                     <input id="pom-duration" type="number" min="1" max="180" value="25" />
@@ -479,25 +480,34 @@ function openFocusMode(){
         // Wire the controls inside the overlay (start, pause, stop, exit). These call functions below.
         const startBtn = document.getElementById('pom-start');
         const pauseBtn = document.getElementById('pom-pause');
-        if (startBtn) startBtn.addEventListener('click', () => { startFocusTimer(taskIndex); startBtn.disabled = true; if (pauseBtn) pauseBtn.textContent = 'Pause'; });
+        if (startBtn) startBtn.addEventListener('click', () => { 
+            // read currently selected task index from the select when starting
+            const selectEl = document.getElementById('focus-task-select');
+            const idx = selectEl ? parseInt(selectEl.value, 10) : taskIndex;
+            startFocusTimer(idx); 
+            startBtn.disabled = true; 
+            if (pauseBtn) pauseBtn.textContent = 'Pause'; 
+        });
         if (pauseBtn) pauseBtn.addEventListener('click', () => togglePausePlay(taskIndex));
         document.getElementById('pom-stop').addEventListener('click', stopFocusTimer);
         document.getElementById('pom-exit').addEventListener('click', closeFocusMode);
     }
 
-    // set task text
-    const taskEl = document.getElementById('focus-task');
-    taskEl.textContent = todo[taskIndex].text;
+    // populate and set the selected task in the select element
+    populateFocusTaskSelect(taskIndex);
 
-    focusRemaining = 25 * 60;
+    const input = document.getElementById('pom-duration');
+    if (input) focusRemaining = parseInt(input.value || '25', 10) * 60; else focusRemaining = 25 * 60;
     updatePomodoroDisplay();
     focusOverlay.classList.add('visible');
     focusRunning = false;
-    // ensure buttons reflect current play state
+    // ensure buttons and select reflect current play state
     const pb = document.getElementById('pom-pause');
     const sb = document.getElementById('pom-start');
     if (pb) pb.textContent = focusRunning ? 'Pause' : 'Play';
     if (sb) sb.disabled = false;
+    // Refresh the task dropdown to reflect the latest `todo` list
+    populateFocusTaskSelect(todo.findIndex(t => !t.disabled));
 }
 
 function updatePomodoroDisplay(){
@@ -632,4 +642,30 @@ function showConfirm(message, yesText = 'Yes', onYes, options = {}){
         if (e.key === 'Escape') cleanup();
     }
     document.addEventListener('keydown', onKey, { once: true });
+}
+
+// Populate the focus task <select> with current `todo` items and set selected index
+function populateFocusTaskSelect(selectedIndex = 0){
+    const sel = document.getElementById('focus-task-select');
+    if (!sel) return;
+    sel.innerHTML = '';
+    // If there are no tasks in todo (should be prevented earlier), show placeholder
+    if (!todo || todo.length === 0){
+        const opt = document.createElement('option');
+        opt.value = -1;
+        opt.textContent = 'No tasks available';
+        sel.appendChild(opt);
+        sel.disabled = true;
+        return;
+    }
+    todo.forEach((t, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = t.text;
+        sel.appendChild(opt);
+    });
+    // Ensure selectedIndex is within bounds
+    if (selectedIndex < 0 || selectedIndex >= todo.length) selectedIndex = 0;
+    sel.value = String(selectedIndex);
+    sel.disabled = false;
 }

@@ -326,12 +326,18 @@ input[type="checkbox"]:checked::after{
 .focus-panel{
     background: var(--panel);
     padding: 2rem;
-    border-radius: 0.75rem;
-    width: min(520px, 90%);
+    border-radius: 0.9rem;
+    width: min(520px, 92%);
+    max-width: 520px;
     text-align: center;
     transform: translateY(-10px) scale(0.98);
-    transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms ease;
+    transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms ease, opacity 200ms ease;
     box-shadow: var(--panel-shadow);
+    /* center contents and provide a neat vertical rhythm */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
 }
 .focus-overlay.visible .focus-panel{
     transform: translateY(0) scale(1);
@@ -351,6 +357,7 @@ input[type="checkbox"]:checked::after{
     align-items: center;
     justify-content: center;
     margin-bottom: 0.5rem;
+    width: 100%;
 }
 .pom-duration input{
     width: 4.5rem;
@@ -361,6 +368,32 @@ input[type="checkbox"]:checked::after{
     background: var(--panel);
     color: var(--text);
 }
+/* Style for task select inside focus panel */
+.focus-task-select{
+    width: 100%;
+    max-width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(0,0,0,0.01), rgba(255,255,255,0.01));
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03) inset;
+}
+
+.focus-panel label[for="focus-task-select"]{width:100%;text-align:left;color:var(--muted);font-size:0.95rem}
+
+.pomodoro-timer{font-size:2.6rem;font-weight:800;margin-bottom:0.4rem}
+
+.focus-controls{display:flex;gap:0.6rem;justify-content:center;width:100%}
+.focus-controls button{min-width:88px;padding:0.55rem 0.9rem;border-radius:0.45rem}
+.focus-controls button#pom-exit{background:#e53e3e;border:1px solid rgba(0,0,0,0.06);color:var(--white)}
+
+/* Small polish: hover states */
+.focus-controls button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+
+/* Make overlay slightly softer */
+.focus-overlay{background: rgba(0,0,0,0.5);} 
 .focus-controls{
     display: flex;
     gap: 0.5rem;
