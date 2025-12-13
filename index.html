@@ -2,15 +2,21 @@
 
 <html lang="en">
 <head>
+    <!-- Document metadata -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="./style.css">
+    <!-- Main stylesheet and app script -->
+    <link rel="stylesheet" href="./style.css">
+     <!-- Cairo font for Arabic confirm dialogs -->
+     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
    <script src="./script.js" defer></script>
-    <title>ToDo </title>
+    <title>ToDo</title>
 </head>
 <body>
+    <!-- Main to-do section: title, input, add button, and task list -->
     <section class="todo">
     <h2>To-do list</h2>
+    <!-- Input container: `#todoInput` is read by script.js, `.btn` triggers adding -->
     <div class="input">
     <input
      type="text"
@@ -20,15 +26,27 @@
      />
         <button class="btn">Add</button>
     </div>
+    <!-- `ul.scroll` is where tasks are rendered; each task is an <li> inserted dynamically -->
     <ul class="scroll">
         <li id="todoList"></li>
     </ul>
+    <!-- Completed tasks area: tasks that were finished are moved here so they can be inspected or restored -->
+    <section class="completed-section" aria-label="Completed tasks" style="display:none">
+        <h3>Completed Tasks</h3>
+        <ul id="completedList" class="completed-list"></ul>
+        <div style="margin-top:0.5rem">
+            <button id="clearCompleted" class="btn" style="padding:0.35rem 0.7rem; font-size:0.9rem">Clear Completed</button>
+        </div>
+    </section>
+    <!-- Footer area of the main section: item counter, Focus mode and Delete All -->
     <div>
         <hr class="counter">
         <div class="counter-container">
+            <!-- JS updates the count inside this <span> -->
             <p><span>0</span> items total</p>
             <div class="counter-actions">
                 <button id="focusButton">Focus</button>
+                <button id="showCompleted">Completed</button>
                 <button id="deleteButton">Delete All</button>
             </div>
         </div>
@@ -37,16 +55,19 @@
     </section>
     <footer>
      <div class="footer">
+        <!-- Left: author / badge -->
         <div class="footer-left">
             <p class="made-by">Made By</p>
             <p class="author">Red Team <span id="badge" class="badge" aria-hidden="true" title="Level 10+">👑</span></p>
         </div>
+        <!-- Center: player profile; values (`#profile-level`, `#profile-xp`, `#profile-next`) are updated by script.js -->
         <div class="player-profile" aria-label="Player profile">
             <div class="pp-title">🧑‍🚀&nbsp;&nbsp;PLAYER PROFILE</div>
             <div class="pp-row"><span class="pp-label">LEVEL</span><span id="profile-level" class="pp-value">0</span></div>
             <div class="pp-row"><span class="pp-label">EXPERIENCE</span><span id="profile-xp" class="pp-value">0 XP</span></div>
             <div class="pp-row"><span class="pp-label">NEXT LVL</span><span id="profile-next" class="pp-value">0 XP LEFT</span></div>
         </div>
+        <!-- Right: theme selection; selecting `custom` reveals the color picker (`#colorPicker`) -->
         <div class="theme-controls">
             <label for="themeSelect">Theme</label>
             <select id="themeSelect" aria-label="Theme select">
@@ -58,5 +79,31 @@
             <input type="color" id="colorPicker" value="#2d70fd" title="Accent color" style="display:none" />
         </div>
     </div> </footer>
+    <!-- Confirmation modal used for destructive actions like deleting completed tasks -->
+    <div id="confirmModal" class="confirm-modal" aria-hidden="true">
+        <div class="confirm-panel" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <div class="confirm-body">
+                <h4 id="confirmTitle">Confirm action</h4>
+                <p id="confirmMessage">Are you sure?</p>
+            </div>
+            <div class="confirm-actions">
+                <button id="confirmCancel" class="btn" style="background:transparent;color:var(--muted);border:1px solid var(--border-color)">Cancel</button>
+                <button id="confirmYes" class="btn" style="padding:0.35rem 0.7rem;">Delete</button>
+            </div>
+        </div>
+    </div>
+        <!-- Completed Tasks Modal (invisible until opened) -->
+        <div id="completedModal" class="completed-modal" aria-hidden="true">
+            <div class="completed-panel" role="dialog" aria-modal="true" aria-labelledby="completedTitle">
+                <div class="completed-header">
+                    <h3 id="completedTitle">Completed Tasks</h3>
+                    <button id="closeCompleted" aria-label="Close">✕</button>
+                </div>
+                <ul id="completedModalList" class="completed-list"></ul>
+                <div style="margin-top:0.5rem; display:flex; gap:0.75rem; justify-content:flex-end">
+                    <button id="clearCompletedModal" class="btn" style="padding:0.35rem 0.7rem; font-size:0.9rem">Clear Completed</button>
+                </div>
+            </div>
+        </div>
 </body>
 </html>

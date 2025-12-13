@@ -1,3 +1,12 @@
+/*
+    CSS variables (custom properties) used across the app.
+    - Theme colors live near the `:root` rule below.
+    - We switch body classes (theme-light, theme-dark, theme-gradient, theme-custom)
+        to override these variables for different themes.
+*/
+/*
+    Reset margins for common text elements. Kept minimal to avoid interfering with app layout.
+*/
 h1,
 h2,
 h3,
@@ -5,7 +14,7 @@ h4,
 h5,
 h6,
 p{
-    margin: 0;
+        margin: 0;
 }
 :root {
     --gradient: linear-gradient(
@@ -13,8 +22,8 @@ p{
         rgba(45, 122, 125, 0.73)  0%,
         #163e92 100%
     );
-    --accent: #2d70fd;
-    --dark: #001747;
+    --accent: #2d70fd; /* primary accent color */
+    --dark: #001747;   /* default dark text */
     --grey: #b1bacb;
     --grey-border: rgba(210, 210, 210, 0.75);
     --grey-light: #eeeeee;
@@ -22,7 +31,7 @@ p{
     --blue: #2d70fd;
     --green: #00d8a7;
     --white: #ffffff;
-    /* theme vars */
+    /* theme vars (can be overridden by body.theme-*) */
     --bg: var(--gradient);
     --panel: #ffffff;
     --text: var(--dark);
@@ -32,7 +41,6 @@ p{
     --btn-bg: var(--accent);
     --btn-text: var(--white);
     --scroll-thumb: var(--accent);
-
 }
 
 body{
@@ -45,6 +53,8 @@ body{
     justify-content: space-evenly;
     align-items: center;
 }
+
+/* The app root uses flexible layout so the main `.todo` card is centered on screen */
 
 /* Theme variants */
 body.theme-light{
@@ -73,6 +83,8 @@ body.theme-gradient{
 body.theme-custom{
     --bg: linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.02) 100%);
 }
+
+/* Theme controls: small UI for picking theme and color. The `.theme-controls` element is in the footer */
 
 .theme-controls{display:flex;gap:0.5rem;align-items:center;margin-left:1rem}
 .theme-controls label{font-size:0.85rem;color:var(--grey)}
@@ -109,6 +121,7 @@ p{
     max-width: 30rem;
     
 }
+/* `.todo` is the main card containing the input, list and controls */
 h2{
     text-transform: uppercase;
     height: 3rem;
@@ -124,6 +137,7 @@ h2{
     border-radius: 0.5rem;
     background: var(--panel);
 }
+/* `.input` wraps the text input + Add button; the `.btn` sits absolutely to the right inside it */
 .input-field{
     flex: 1;
     min-width: 0;
@@ -152,6 +166,7 @@ li {
     padding: 0.6rem 0.8rem;
     border-bottom: 1px solid var(--border-color);
 }
+/* Each list item (.li) contains checkbox, label text and a delete control */
 .item-delete{
     margin-left: auto;
     background: transparent;
@@ -198,6 +213,7 @@ input[type="checkbox"]{
     vertical-align: middle;
     background: var(--panel);
 }
+/* custom checkbox styling: appearance removed and a circular accent applied when checked */
 
 
 input[type="checkbox"]::after{
@@ -302,6 +318,7 @@ input[type="checkbox"]:checked::after{
     pointer-events: none;
     transition: opacity 220ms ease;
 }
+/* Focus / Pomodoro UI: overlay + panel contain controls for timer and task details. Visible class `.visible` toggles display */
 .focus-overlay.visible{
     opacity: 1;
     pointer-events: auto;
@@ -373,6 +390,7 @@ input[type="checkbox"]:checked::after{
     border-radius: 0.5rem;
 
 }
+/* Footer area contains author info, player profile and theme controls */
 .made-by, .author{
     font-size: 0.9rem;
 
@@ -403,6 +421,7 @@ input[type="checkbox"]:checked::after{
     color: var(--text);
     box-shadow: var(--panel-shadow);
 }
+/* `.player-profile` is a small summary box that shows Level / XP / Next Level text. Values are updated by JS. */
 .pp-title{
     font-weight:700;
     margin-bottom:0.45rem;
@@ -470,3 +489,58 @@ li.drag-over{
 @media (max-width:720px){
     .player-profile{min-width:160px;font-size:0.92rem}
 }
+
+/* welcome page player profile box styles */
+.pp-box{font-family:monospace;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.02));padding:0.6rem;border-radius:6px}
+.pp-border-top,.pp-footer{color:var(--muted);text-align:center}
+.pp-header{color:var(--text);text-align:center;font-weight:700}
+.pp-row{display:flex;justify-content:space-between;padding:0.25rem 0}
+.pp-key{color:var(--muted);font-weight:700}
+.pp-val{color:var(--text);font-weight:800}
+.pp-bar-wrap{padding-top:0.4rem}
+.pp-bar{width:100%;height:10px;background:rgba(0,0,0,0.06);border-radius:999px;overflow:hidden}
+.pp-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent), #7ad1ff);width:0%;transition:width 420ms ease}
+
+/* Completed tasks UI */
+.completed-section{margin-top:1rem;border-top:1px dashed var(--border-color);padding-top:0.8rem}
+.completed-section h3{font-size:0.95rem;margin-bottom:0.4rem;color:var(--muted)}
+.completed-list li{display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
+.completed-list .restore-btn{margin-left:auto;background:transparent;border:1px solid var(--border-color);padding:0.25rem 0.5rem;border-radius:0.35rem;cursor:pointer}
+.completed-list .restore-btn:active{transform:scale(0.98)}
+.completed-list .meta{font-size:0.8rem;color:var(--muted);margin-left:0.5rem}
+
+/* Modal for completed tasks */
+.completed-modal{
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.35);
+    z-index: 10000;
+}
+.completed-modal.visible{display:flex}
+.completed-panel{
+    background: var(--panel);
+    border-radius: 0.6rem;
+    width: min(560px, 92%);
+    max-height: 70vh;
+    overflow: auto;
+    padding: 1rem;
+    box-shadow: var(--panel-shadow);
+}
+.completed-header{display:flex;align-items:center;justify-content:space-between;gap:0.5rem}
+.completed-header h3{margin:0}
+.completed-header button{background:transparent;border:none;font-size:1.25rem;cursor:pointer}
+.completed-panel .completed-list li{display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0;border-bottom:1px solid rgba(0,0,0,0.04)}
+
+/* Confirm modal styles (generic) */
+.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.36);z-index:11000}
+.confirm-modal.visible{display:flex}
+.confirm-panel{background:var(--panel);padding:1rem 1.1rem;border-radius:0.6rem;box-shadow:var(--panel-shadow);width:min(420px, 92%);}
+.confirm-body{padding-bottom:0.5rem}
+.confirm-actions{display:flex;gap:0.6rem;justify-content:flex-end;margin-top:0.5rem}
+.confirm-actions .btn{padding:0.35rem 0.7rem}
+
+/* Cairo font helper for specific confirm dialogs */
+.confirm-panel.confirm-cairo, .confirm-panel.confirm-cairo .confirm-body {font-family: 'Cairo', sans-serif}
