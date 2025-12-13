@@ -68,13 +68,14 @@ body.theme-light{
     --btn-bg: var(--accent);
 }
 body.theme-dark{
+    /* Dark theme with improved contrast for readability */
     --accent: #00d8a7;
     --bg: #071029;
-    --panel: #071826;
-    --text: #dfe9f3;
-    --muted: #92a1b8;
-    --border-color: rgba(255,255,255,0.04);
-    --panel-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    --panel: #07212b; /* slightly lighter than background to separate panels */
+    --text: #eaf6ff;  /* brighter text for higher contrast */
+    --muted: #9fb7c9; /* slightly brighter muted tone */
+    --border-color: rgba(255,255,255,0.08);
+    --panel-shadow: 0 8px 26px rgba(0,0,0,0.6);
     --btn-bg: var(--accent);
 }
 body.theme-gradient{
@@ -148,6 +149,21 @@ h2{
 }
 input[type="text"]::placeholder{
     color: var(--muted);
+}
+
+/* Ensure form controls and text inputs use theme text color (fixes dark theme readability) */
+input[type="text"], input[type="number"], textarea, select, .input-field, .focus-task-select, .pom-duration input{
+    color: var(--text);
+    background: transparent;
+}
+input[type="text"]::placeholder, textarea::placeholder{
+    color: var(--muted);
+    opacity: 0.95;
+}
+
+/* completed list text contrast */
+.completed-list p, #completedModalList p, #completedList p, .meta {
+    color: var(--text);
 }
 .todo-container{
     display: flex;

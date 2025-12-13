@@ -303,6 +303,18 @@ function renderCompleted(){
         list.innerHTML = '';
         completed.forEach((item, idx) => {
             const li = document.createElement('li');
+            // Add a checkbox inside the completed list so users can uncheck to restore
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = true; // completed tasks are checked by default
+            checkbox.className = 'completed-checkbox';
+            checkbox.title = 'إرجاع';
+            checkbox.setAttribute('aria-label', 'Restore completed task');
+            checkbox.addEventListener('change', () => {
+                // If user unchecks, restore the task back to todo
+                if (!checkbox.checked) restoreCompleted(idx);
+            });
+
             const p = document.createElement('p');
             p.textContent = item.text;
             p.style.margin = '0';
@@ -329,6 +341,7 @@ function renderCompleted(){
                 renderCompleted();
             });
 
+            li.appendChild(checkbox);
             li.appendChild(p);
             li.appendChild(meta);
             li.appendChild(restoreBtn);
