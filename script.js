@@ -316,8 +316,13 @@ function renderCompleted(){
             const delBtn = document.createElement('button');
             delBtn.className = 'item-delete';
             delBtn.title = 'Delete completed task';
-            delBtn.textContent = 'Delete';
-            // Delete completed task immediately without showing confirm (user requested)
+            // Use trash SVG icon instead of text for the delete action
+            delBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="currentColor">
+                    <path d="M3 6h18v2H3V6zm2 3h14l-1 11H6L5 9zm5-6h4l1 1h5v2H3V4h5l1-1z" />
+                </svg>
+            `;
+            // Delete completed task immediately without confirmation (user requested)
             delBtn.addEventListener('click', () => {
                 completed.splice(idx, 1);
                 saveToLocalStorage();
